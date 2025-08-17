@@ -11,23 +11,23 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.LangLearner.entities.Word;
-import com.LangLearner.repositories.WordRepo;
+import com.LangLearner.services.WordService;
 
 @RestController
 @RequestMapping("/api/words")
 public class WordController {
 
     @Autowired
-    private WordRepo wordRepository;
+     private WordService wordService;
 
     @GetMapping
     public List<Word> getAllWords() {
-        return wordRepository.findAll();
+        return wordService.getAllWords();
     }
 
     @PostMapping
     public Word addWord(@RequestBody Word word) {
-        return wordRepository.save(word);
+        return wordService.addWord(word);
     }
 }
 
