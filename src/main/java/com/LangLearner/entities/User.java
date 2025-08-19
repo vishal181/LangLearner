@@ -1,7 +1,7 @@
 package com.LangLearner.entities;
 
-
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users") // avoid reserved word 'user' in SQL
@@ -26,6 +26,13 @@ public class User {
     @Column
     private String fullName;
 
+    // ✅ Timestamp fields
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
     // ✅ Constructors
     public User() {}
 
@@ -35,6 +42,18 @@ public class User {
         this.role = role;
         this.email = email;
         this.fullName = fullName;
+    }
+
+    // ✅ Auto populate timestamps
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
     }
 
     // ✅ Getters and Setters
@@ -85,5 +104,12 @@ public class User {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-}
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+}

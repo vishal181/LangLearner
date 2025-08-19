@@ -23,10 +23,10 @@ public class LoginController {
         return userService.registerUser(user);
     }
 
-    // ✅ Login (simple check)
+    // ✅ Login (expects JSON { "username": "...", "password": "..." })
     @PostMapping("/login")
-    public User login(@RequestParam String username, @RequestParam String password) {
-        return userService.login(username, password);
+    public User login(@RequestBody User loginRequest) {
+        return userService.login(loginRequest.getUsername(), loginRequest.getPassword());
     }
 
     // ✅ Get all users (admin use only)

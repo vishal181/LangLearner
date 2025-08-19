@@ -14,14 +14,20 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    @Override
-    public User registerUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Username already exists!");
-        }
-        return userRepository.save(user);
+@Override
+public User registerUser(User user) {
+    // ✅ Check if username already exists
+    if (userRepository.existsByUsername(user.getUsername())) {
+        throw new RuntimeException("Username already exists!");
     }
 
+    // ✅ Set default role if none provided
+    if (user.getRole() == null || user.getRole().isBlank()) {
+        user.setRole("USER");
+    }
+
+    return userRepository.save(user);
+}
     @Override
     public User login(String username, String password) {
         return userRepository.findByUsername(username)
