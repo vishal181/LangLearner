@@ -1,60 +1,52 @@
 package com.LangLearner.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "words")
 public class Word {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String spanish;
-    private String english;
-    private String category; // e.g., Greetings, Food, Travel
 
-    public Word() {
-    }
+    @Column(nullable = false)
+    private String englishWord;  // matches JSON field "englishWord"
 
-    public Word(String spanish, String english, String category) {
-        this.spanish = spanish;
-        this.english = english;
+    @Column(nullable = false)
+    private String spanishWord;  // matches JSON field "spanishWord"
+
+    // Many words belong to one category
+    @ManyToOne
+    @JoinColumn(name = "category_name", referencedColumnName = "name")
+    private Category category;
+
+    // Many words belong to one user
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
+
+    public Word() {}
+
+    public Word(String englishWord, String spanishWord, User user, Category category) {
+        this.englishWord = englishWord;
+        this.spanishWord = spanishWord;
+        this.user = user;
         this.category = category;
     }
 
-    // Getters & Setters
-    public Long getId() {
-        return id;
-    }
+    // Getters & setters
+    public Long getId() { return id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getEnglishWord() { return englishWord; }
+    public void setEnglishWord(String englishWord) { this.englishWord = englishWord; }
 
-    public String getSpanish() {
-        return spanish;
-    }
+    public String getSpanishWord() { return spanishWord; }
+    public void setSpanishWord(String spanishWord) { this.spanishWord = spanishWord; }
 
-    public void setSpanish(String spanish) {
-        this.spanish = spanish;
-    }
+    public Category getCategory() { return category; }
+    public void setCategory(Category category) { this.category = category; }
 
-    public String getEnglish() {
-        return english;
-    }
-
-    public void setEnglish(String english) {
-        this.english = english;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
+    public User getUser() { return user; }
+    public void setUser(User user) { this.user = user; }
 }
-

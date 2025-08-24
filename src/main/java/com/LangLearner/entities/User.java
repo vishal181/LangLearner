@@ -2,9 +2,11 @@ package com.LangLearner.entities;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Table(name = "users") // avoid reserved word 'user' in SQL
+@Table(name = "users")
 public class User {
 
     @Id
@@ -20,20 +22,18 @@ public class User {
     @Column(nullable = false)
     private String role; // "ADMIN" or "USER"
 
-    @Column
     private String email;
-
-    @Column
     private String fullName;
 
-    // ✅ Timestamp fields
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    // ✅ Constructors
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Word> words = new ArrayList<>();
+
     public User() {}
 
     public User(String username, String password, String role, String email, String fullName) {
@@ -44,7 +44,6 @@ public class User {
         this.fullName = fullName;
     }
 
-    // ✅ Auto populate timestamps
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -56,60 +55,21 @@ public class User {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // ✅ Getters and Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
+    // Getters & Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public List<Word> getWords() { return words; }
+    public void setWords(List<Word> words) { this.words = words; }
 }
